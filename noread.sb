@@ -36,9 +36,7 @@
 ;; themselves. Otherwise it will set PATH to "" and disable colored output
 (allow file-read*
   (literal "/")
-  (literal "/Users")
-  (literal (param "HOME_DIR"))
-  (literal (string-append (param "HOME_DIR") "/src")))
+  )
 
 (allow file-read*
     ;; Git configuration (for commits)
@@ -95,29 +93,29 @@
 (allow file-read* file-write* file-write-create
     ;; Project directory - primary workspace
     (subpath (param "TARGET_DIR"))
-    
+
     ;; Temporary directories
     (subpath (param "TMP_DIR"))
     (subpath "/tmp")
     (subpath "/private/tmp")
     (subpath "/var/folders")  ; macOS temp directory root
     (subpath "/private/var/folders")  ; Real path (var is symlink to private/var)
-    
+
     ;; below is from `para`'s' sandbox.sb, but these rules don't work because sandbox-exec uses GLOB 'regexes'
     ;; (regex #"^/var/folders/[^/]+/[^/]+/[^/]+/.*")  ; macOS temp dirs and subdirs
     ;; (regex #"^/private/var/folders/[^/]+/[^/]+/[^/]+/.*")  ; Real path version
     ;; (regex #"^/var/folders/.*")  ; Allow all subdirectories under /var/folders for broader compatibility
     ;; (regex #"^/private/var/folders/.*")  ; Real path version
-    
+
     ;; Cache directory
     (subpath (param "CACHE_DIR"))
     (subpath (string-append (param "HOME_DIR") "/.cache"))
-    
+
     ;; Claude configuration
     (subpath (string-append (param "HOME_DIR") "/.claude"))
     (literal (string-append (param "HOME_DIR") "/.claude.json"))
     (literal (string-append (param "HOME_DIR") "/.claude.json.backup"))
-    
+
     ;; Standard I/O devices
     (literal "/dev/stdout")
     (literal "/dev/stderr")
