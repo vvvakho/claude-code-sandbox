@@ -4,8 +4,6 @@ A macOS sandbox configuration for Claude Code that restricts filesystem READ acc
 
 Just about all sandbox-exec attempts for `claude` you'll find on GitHub allow full filesystem read access and full network access – all they protect against is file overwrites. But that's not very secure - prompt injection could leak data from all over your filesystem if `claude` can read it.
 
-## Overview
-
 This project provides a macOS `sandbox-exec` profile that limits `claude`'s access to your filesystem. It prevents Claude Code from reading your home directory (except for the current working directory) and restricts writes to only the target directory and temporary locations.
 
 ## Features
