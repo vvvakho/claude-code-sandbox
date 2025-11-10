@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+TARGET_DIR="${TARGET_DIR:-`pwd`}"
+
+sandbox-exec -f ~/.config/claude-sandbox/noread.sb -D "TARGET_DIR=${TARGET_DIR}" -D "TMP_DIR=/tmp" -D "HOME_DIR=${HOME}" -D "CACHE_DIR=${HOME}/.cache" $*

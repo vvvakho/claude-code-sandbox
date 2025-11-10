@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -xve
+
+mkdir -p ~/.config/claude-sandbox
+cp noread.sb ~/.config/claude-sandbox/noread.sb
+
+mkdir -p ~/.local/bin
+cp claude-sandbox ~/.local/bin/claude-sandbox
+chmod +x ~/.local/bin/claude-sandbox
