@@ -11,7 +11,7 @@ This project provides a macOS `sandbox-exec` profile that limits `claude`'s acce
 - **Restricted Read Access**: Blocks reading from file system except for:
   - Current working directory (`TARGET_DIR`)
   - Git configuration files (`.gitconfig`, `.config/git`)
-  - System directories (`/usr`, `/bin`, `/opt`, `/var`, `/private/var`, `/nix`)
+  - System directories (`/usr`, `/bin`, `/opt`, `/var`, `/nix`, `/etc`, `/System`, `/Library/Java`)
   - It allows _listing_ directories leading up to `TARGET_DIR`, because otherwise claude will glitch and set PATH to "" for agent.
     However, even though files in `~` can be listed with `ls` by claude, they (and their metadata) cannot be read
 

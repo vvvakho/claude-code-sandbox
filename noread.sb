@@ -28,7 +28,11 @@
   (subpath "/opt")
   (subpath "/var")
   (subpath "/private/var")
-  (subpath "/nix"))
+  (subpath "/etc")
+  (subpath "/private/etc")
+  (subpath "/System")
+  (subpath "/nix")
+  )
 
 ;; === IMPORTANT === MODIFY this section to include ALL directories leading to claude workdir ===
 ;; for some reason claude-code needs list access to all parent directories of TARGET_DIR
@@ -74,6 +78,7 @@
     (sysctl-name "hw.l3cachesize_compat")
     (sysctl-name "hw.logicalcpu_max")
     (sysctl-name "hw.machine")
+    (sysctl-name "hw.memsize")
     (sysctl-name "hw.ncpu")
     (sysctl-name "hw.pagesize_compat")
     (sysctl-name "hw.physicalcpu_max")
@@ -185,4 +190,17 @@
     (global-name "com.apple.SecurityServer")
     (global-name "com.apple.securityd")
     (global-name "com.apple.securityd.xpc")
+)
+
+;; Scala development permissions
+
+;; read/write ~/.sbt & coursier caches
+(allow file-read* file-write*
+    (subpath (string-append (param "HOME_DIR") "/.sbt"))
+    (subpath (string-append (param "HOME_DIR") "/Library/Caches/Coursier"))
+)
+;; read [~]/Library/Java
+(allow file-read*
+    (subpath (string-append (param "HOME_DIR") "/Library/Java"))
+    (subpath "/Library/Java")
 )
