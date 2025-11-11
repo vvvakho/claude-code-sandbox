@@ -192,13 +192,75 @@
     (global-name "com.apple.securityd.xpc")
 )
 
-;; Scala development permissions
+;; Java/Scala development permissions
+
+;; Java-specific services
+(allow mach-lookup
+  (global-name "com.apple.diagnosticd")
+  (global-name "com.apple.SystemConfiguration.configd")
+)
+
+;; Java-specific sysctl reads
+(allow sysctl-read
+    (sysctl-name "security.mac.lockdown_mode_state")
+    (sysctl-name "kern.bootargs")
+    (sysctl-name "kern.osvariant_status")
+    (sysctl-name "kern.argmax")
+    (sysctl-name "hw.ephemeral_storage")
+    (sysctl-name "hw.optional.armv8_crc32")
+    (sysctl-name "hw.optional.arm.FEAT_LSE")
+    (sysctl-name "hw.optional.armv8_1_atomics")
+    (sysctl-name "hw.optional.arm.FEAT_SHA512")
+    (sysctl-name "hw.optional.armv8_2_sha512")
+    (sysctl-name "hw.optional.arm.FEAT_SHA3")
+    (sysctl-name "hw.optional.armv8_2_sha3")
+    (sysctl-name "net.routetable.0.0.3.0")
+)
+
+;; Java needs to read dtracehelper
+(allow file-read-data (literal "/dev/dtracehelper"))
+
+;: ;; Java needs IPC shared memory for notification center
+;; (allow ipc-posix-shm-read-data
+;;     (ipc-posix-name "apple.shm.notification_center")
+;; )
+
+;; Java needs system sockets (domain:32 is AF_NDRV for network device raw access)
+(allow system-socket)
+
+;; Java needs to read metadata on certain directories
+(allow file-read-metadata
+    (literal "/dev")
+    (literal "/private")
+    (literal "/Library")
+    (literal (string-append (param "HOME_DIR") "/Library"))
+    (literal (string-append (param "HOME_DIR") "/Library/Caches"))
+)
+
+(allow file-read-data
+    (literal "/dev")
+)
+
+;; Java needs to read various preference files
+(allow file-read*
+    (literal "/Library/Preferences/Logging/com.apple.diagnosticd.filter.plist")
+    (literal "/Library/Preferences/.GlobalPreferences.plist")
+    (literal "/Library/Preferences/com.apple.networkd.plist")
+    (literal (string-append (param "HOME_DIR") "/Library/Preferences/.GlobalPreferences.plist"))
+    (literal (string-append (param "HOME_DIR") "/Library/Preferences/.GlobalPreferences_m.plist"))
+    (regex (string-append "^" (param "HOME_DIR") "/Library/Preferences/ByHost/\\.GlobalPreferences\\..*\\.plist$"))
+)
 
 ;; read/write ~/.sbt & coursier caches
 (allow file-read* file-write*
     (subpath (string-append (param "HOME_DIR") "/.sbt"))
+    (subpath (string-append (param "HOME_DIR") "/.ivy2"))
+    (subpath (string-append (param "HOME_DIR") "/.m2"))
+    (subpath (string-append (param "HOME_DIR") "/.jgit"))
+    (subpath (string-append (param "HOME_DIR") "/.config/jgit"))
     (subpath (string-append (param "HOME_DIR") "/Library/Caches/Coursier"))
 )
+
 ;; read [~]/Library/Java
 (allow file-read*
     (subpath (string-append (param "HOME_DIR") "/Library/Java"))
