@@ -2,7 +2,8 @@
 
 set -xe
 
-BIN_INSTALL_DIR="${BIN_INSTALL_DIR:-"${HOME}/.local/bin"}"
+PREFIX="${PREFIX:-${HOME}/.local}"
+BIN_INSTALL_DIR="${PREFIX}/bin"
 BIN_INSTALL_FILE="${BIN_INSTALL_DIR}/claude-sandbox"
 
 mkdir -p "${BIN_INSTALL_DIR}"
