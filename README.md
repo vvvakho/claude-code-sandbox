@@ -26,6 +26,8 @@ This project provides a macOS `sandbox-exec` profile that limits `claude`'s acce
 
 ## Installation
 
+### Manual Installation (Without Nix)
+
 Run the installation script:
 
 ```bash
@@ -38,6 +40,30 @@ This will:
 3. Make the script executable
 
 Ensure that `~/.local/bin` is in your PATH.
+
+### Using Nix
+
+If you have Nix installed, you can run `claude-sandbox` directly without installing:
+
+```bash
+nix run github:neko-kai/claude-code-sandbox -- claude
+```
+
+Or install it to your profile:
+
+```bash
+nix profile install github:neko-kai/claude-code-sandbox
+```
+
+You can also add it to a flake-based NixOS or home-manager configuration:
+
+```nix
+{
+  inputs.claude-code-sandbox.url = "github:neko-kai/claude-code-sandbox";
+
+  # Then use inputs.claude-code-sandbox.packages.${system}.default
+}
+```
 
 ## Usage
 
