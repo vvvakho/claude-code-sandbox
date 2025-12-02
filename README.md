@@ -71,13 +71,13 @@ Instead of running `claude` directly, use the `claude-sandbox` wrapper:
 
 ```bash
 # run bash to browse the sandbox-accessible filesystem
-~/.local/bin/claude-sandbox bash
+claude-sandbox bash
 
 # run claude
-~/.local/bin/claude-sandbox claude
+claude-sandbox claude
 
 # view generated sandbox-exec profile
-~/.local/bin/claude-sandbox --write-profile-file curprofile.sb -- cat curprofile.sb
+claude-sandbox --write-profile-file curprofile.sb -- cat curprofile.sb
 ```
 
 ## How to add access to more directories
