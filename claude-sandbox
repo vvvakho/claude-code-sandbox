@@ -117,9 +117,16 @@ if [[ ${#POSITIONAL_ARGS[@]} -eq 0 ]]; then
     POSITIONAL_ARGS=("bash")
 fi
 
+# Detect if already running inside a sandbox (nested sandboxing is not supported on macOS)
+if sandbox-exec -p '(version 1)(allow default)' true 2>/dev/null; [ $? -eq 71 ]; then
+    echo "Error: Already running inside a sandbox. Nested sandboxing is not supported on macOS." >&2
+    echo "If you're running inside claude-sandbox, you cannot nest another sandbox." >&2
+    exit 1
+fi
+
 TARGET_DIR="${TARGET_DIR:-$(pwd)}"
 TARGET_DIR="$(realpath -m "${TARGET_DIR}" 2>/dev/null)"
-WRITE_PROFILE_FILE="${WRITE_PROFILE_FILE:-$(mkdir -p "${HOME}/.config/claude-sandbox"; mktemp "${HOME}/.config/claude-sandbox/profile.XXXXXXXXXX.sb")}"
+WRITE_PROFILE_FILE="${WRITE_PROFILE_FILE:-$( (mkdir -p "${HOME}/.config/claude-sandbox" && mktemp "${HOME}/.config/claude-sandbox/profile.XXXXXXXXXX.sb") 2>/dev/null || mktemp "/tmp/claude-sandbox-profile.XXXXXXXXXX.sb")}"
 NO_WORKAROUND="${NO_WORKAROUND:-0}"
 
 if [[ "${NO_WORKAROUND}" == 0 ]]; then
