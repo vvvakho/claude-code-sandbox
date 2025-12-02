@@ -60,6 +60,8 @@ You can also add it to a flake-based NixOS or home-manager configuration:
 ```nix
 {
   inputs.claude-code-sandbox.url = "github:neko-kai/claude-code-sandbox";
+  inputs.claude-code-sandbox.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.claude-code-sandbox.inputs.flake-utils.follows = "flake-utils";
 
   # Then use inputs.claude-code-sandbox.packages.${system}.default
 }
