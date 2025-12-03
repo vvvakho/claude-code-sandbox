@@ -121,6 +121,9 @@
     (literal (string-append (param "HOME_DIR") "/.claude.json"))
     (literal (string-append (param "HOME_DIR") "/.claude.json.backup"))
 
+    ;; Gemini configuraiton
+    (subpath (string-append (param "HOME_DIR") "/.gemini"))
+
     ;; Standard I/O devices
     (literal "/dev/stdout")
     (literal "/dev/stderr")
