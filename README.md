@@ -41,7 +41,7 @@ This will:
 
 Ensure that `~/.local/bin` is in your PATH.
 
-### Using Nix
+### Using Nix (Recommended)
 
 If you have Nix installed, you can run `claude-sandbox` directly without installing:
 
