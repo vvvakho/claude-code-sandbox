@@ -135,18 +135,18 @@
 )
 
 ;; Allow terminal I/O operations (required for interactive mode)
-(allow file-ioctl (regex #"^/dev/tty.*"))
+(allow file-ioctl file-read-metadata (regex #"^/dev/tty.*"))
 
 ;; File I/O on device files - sandbox-runtime - https://github.com/anthropic-experimental/sandbox-runtime/blob/1bafa66a2c3ebc52569fc0c1a868e85e778f66a0/src/sandbox/macos-sandbox-utils.ts#L200
-(allow file-ioctl (literal "/dev/null"))
-(allow file-ioctl (literal "/dev/zero"))
-(allow file-ioctl (literal "/dev/dtracehelper"))
-(allow file-ioctl (literal "/dev/tty"))
+(allow file-ioctl file-read-metadata  (literal "/dev/null"))
+(allow file-ioctl file-read-metadata  (literal "/dev/zero"))
+(allow file-ioctl file-read-metadata  (literal "/dev/dtracehelper"))
+(allow file-ioctl file-read-metadata  (literal "/dev/tty"))
 ;; Allow reading from random devices (required for Nix/libsodium crypto initialization)
-(allow file-ioctl file-read-data (literal "/dev/random"))
-(allow file-ioctl file-read-data (literal "/dev/urandom"))
+(allow file-ioctl file-read-metadata file-read-data (literal "/dev/random"))
+(allow file-ioctl file-read-metadata file-read-data (literal "/dev/urandom"))
 
-(allow file-ioctl file-read-data file-write-data
+(allow file-ioctl file-read-metadata file-read-data file-write-data
   (require-all
     (literal "/dev/null")
     (vnode-type CHARACTER-DEVICE)
