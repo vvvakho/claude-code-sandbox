@@ -97,7 +97,7 @@
 
 ;; Allow file writes to specific paths only
 ;; Note: file-write* does NOT include file-write-create, so we need both
-(allow file-read* file-write* file-write-create
+(allow file-read* file-write* file-write-create file-read-metadata file-ioctl
     ;; Project directory - primary workspace
     (subpath (param "TARGET_DIR"))
 
@@ -130,30 +130,26 @@
     (literal "/dev/stdout")
     (literal "/dev/stderr")
     (literal "/dev/null")
+    (literal "/dev/zero")
     (literal "/dev/tty")
     (literal "/dev/ptmx")
-    (regex #"^/dev/ttys[0-9]+")
-    (regex #"^/dev/pty[0-9]+")
+    (literal "/dev/urandom")
+    (literal "/dev/random")
+    (regex #"^/dev/tty*")
+    (regex #"^/dev/pty*")
 )
 
-;; Allow terminal I/O operations (required for interactive mode)
-(allow file-ioctl file-read-metadata (regex #"^/dev/tty.*"))
-
 ;; File I/O on device files - sandbox-runtime - https://github.com/anthropic-experimental/sandbox-runtime/blob/1bafa66a2c3ebc52569fc0c1a868e85e778f66a0/src/sandbox/macos-sandbox-utils.ts#L200
-(allow file-ioctl file-read-metadata  (literal "/dev/null"))
-(allow file-ioctl file-read-metadata  (literal "/dev/zero"))
-(allow file-ioctl file-read-metadata  (literal "/dev/dtracehelper"))
-(allow file-ioctl file-read-metadata  (literal "/dev/tty"))
-;; Allow reading from random devices (required for Nix/libsodium crypto initialization)
-(allow file-ioctl file-read-metadata file-read-data (literal "/dev/random"))
-(allow file-ioctl file-read-metadata file-read-data (literal "/dev/urandom"))
-
+(allow file-ioctl file-read-metadata file-read-data file-write-data  (literal "/dev/dtracehelper"))
 (allow file-ioctl file-read-metadata file-read-data file-write-data
   (require-all
     (literal "/dev/null")
     (vnode-type CHARACTER-DEVICE)
   )
 )
+
+;; Gemini-specific permissions
+(allow pseudo-tty)
 
 ;; Allow mach lookups for essential services
 (allow mach-lookup
