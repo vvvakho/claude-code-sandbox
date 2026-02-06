@@ -48,6 +48,9 @@
     (literal (string-append (param "HOME_DIR") "/.gitconfig"))
     ;; Nix configuration
     (subpath (string-append (param "HOME_DIR") "/.config/nix"))
+    ;; Nix profile binaries (symlinks to /nix/store)
+    (subpath (string-append (param "HOME_DIR") "/.nix-profile"))
+    (subpath (string-append (param "HOME_DIR") "/.local/state/nix"))
 )
 
 ;; Allow process execution and forking (children inherit policy)
@@ -122,6 +125,7 @@
     (subpath (string-append (param "HOME_DIR") "/.claude"))
     (literal (string-append (param "HOME_DIR") "/.claude.json"))
     (literal (string-append (param "HOME_DIR") "/.claude.json.backup"))
+    (subpath (string-append (param "HOME_DIR") "/Library/Caches/claude-cli-nodejs"))
 
     ;; Gemini configuraiton
     (subpath (string-append (param "HOME_DIR") "/.gemini"))
@@ -154,6 +158,7 @@
 ;; Allow mach lookups for essential services
 (allow mach-lookup
     (global-name "com.apple.sysmond")  ; For process listing
+    (global-name "com.apple.FSEvents")  ; For Node.js file watching
 )
 
 ;; Allow file attribute operations needed for file creation
