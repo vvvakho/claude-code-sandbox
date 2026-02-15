@@ -34,6 +34,10 @@
   (subpath "/nix")
   )
 
+;; necessary for nix-darwin's `/run/current-system/sw/bin`
+(allow file-read-metadata
+  (subpath "/run"))
+
 ;; === IMPORTANT === MODIFY this section to include ALL directories leading to claude workdir ===
 ;; for some reason claude-code needs list access to all parent directories of TARGET_DIR
 ;; - it doesn't need access to read the contents of directories, only the directories
@@ -85,6 +89,8 @@
     (sysctl-name "hw.machine")
     (sysctl-name "hw.memsize")
     (sysctl-name "hw.ncpu")
+    ;; Needed for Lix
+    (sysctl-name "hw.pagesize")
     (sysctl-name "hw.pagesize_compat")
     (sysctl-name "hw.physicalcpu_max")
     (sysctl-name "hw.tbfrequency_compat")
@@ -127,7 +133,7 @@
     (literal (string-append (param "HOME_DIR") "/.claude.json.backup"))
     (subpath (string-append (param "HOME_DIR") "/Library/Caches/claude-cli-nodejs"))
 
-    ;; Gemini configuraiton
+    ;; Gemini configuration
     (subpath (string-append (param "HOME_DIR") "/.gemini"))
 
     ;; Standard I/O devices
@@ -159,6 +165,7 @@
 (allow mach-lookup
     (global-name "com.apple.sysmond")  ; For process listing
     (global-name "com.apple.FSEvents")  ; For Node.js file watching
+    (global-name "com.apple.SystemConfiguration.DNSConfiguration")  ; For DNS resolution in Lix
 )
 
 ;; Allow file attribute operations needed for file creation
