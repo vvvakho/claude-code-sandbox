@@ -18,7 +18,6 @@
   (subpath "/")
   (subpath "/Users")
   (subpath (param "HOME_DIR"))
-  (subpath (string-append (param "HOME_DIR") "/.ssh"))
 )
 
 ;; allow directories required to launch claude-code
@@ -32,6 +31,7 @@
   (subpath "/private/etc")
   (subpath "/System")
   (subpath "/nix")
+  (subpath "/Library/Developer")
   )
 
 ;; === IMPORTANT === MODIFY this section to include ALL directories leading to claude workdir ===
@@ -43,11 +43,20 @@
   )
 
 (allow file-read*
+    ;; Claude CLI binary and runtime
+    (subpath (string-append (param "HOME_DIR") "/.local"))
+    ;; SSH (read-only for keys/config/known_hosts - needed for git over SSH)
+    (subpath (string-append (param "HOME_DIR") "/.ssh"))
     ;; Git configuration (for commits)
     (subpath (string-append (param "HOME_DIR") "/.config/git"))
     (literal (string-append (param "HOME_DIR") "/.gitconfig"))
     ;; Nix configuration
     (subpath (string-append (param "HOME_DIR") "/.config/nix"))
+)
+
+;; Allow writing to known_hosts only (for SSH host verification)
+(allow file-write* file-write-create
+    (literal (string-append (param "HOME_DIR") "/.ssh/known_hosts"))
 )
 
 ;; Allow process execution and forking (children inherit policy)
@@ -117,6 +126,9 @@
     ;; Cache directory
     (subpath (param "CACHE_DIR"))
     (subpath (string-append (param "HOME_DIR") "/.cache"))
+
+    ;; GPG keyring (for signed git commits)
+    (subpath (string-append (param "HOME_DIR") "/.gnupg"))
 
     ;; Claude configuration
     (subpath (string-append (param "HOME_DIR") "/.claude"))
