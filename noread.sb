@@ -112,6 +112,10 @@
     ;; Project directory - primary workspace
     (subpath (param "TARGET_DIR"))
 
+    ;; Git worktrees - created as sibling directories (e.g. project-feature next to project)
+    ;; Allows paths starting with TARGET_DIR followed by a hyphen (default worktree naming)
+    (regex (string-append "^" (param "TARGET_DIR") "-.*"))
+
     ;; Temporary directories
     (subpath (param "TMP_DIR"))
     (subpath "/tmp")
